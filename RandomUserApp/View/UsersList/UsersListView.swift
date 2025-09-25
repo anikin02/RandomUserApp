@@ -27,7 +27,8 @@ struct UsersListView: View {
           LazyVStack {
             ForEach(Array(viewModel.users.enumerated()), id: \.element) { index, user in
               UserRowView(user: user)
-              
+                .transition(.move(edge: .bottom).combined(with: .opacity))
+          
               if index != viewModel.users.count - 1 {
                 Divider()
                   .background(Color.gray.opacity(0.5))
@@ -36,10 +37,10 @@ struct UsersListView: View {
           }
           .padding(.bottom, 100)
           .padding()
+          .animation(.easeInOut, value: viewModel.users)
         }
         .background(.white)
       }
     }
-    .navigationTitle("Random Users")
   }
 }

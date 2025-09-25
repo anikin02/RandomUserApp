@@ -54,7 +54,9 @@ class UsersListViewController: UIViewController {
   }
   
   @objc func addNewUser(){
-    viewModel.addNewUser()
+    withAnimation {
+      viewModel.addNewUser()
+    }
   }
 }
 
