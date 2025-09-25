@@ -11,7 +11,7 @@ struct UserResponse: Codable {
   let results: [User]
 }
 
-struct User: Codable {
+struct User: Codable, Hashable, Equatable {
   let gender: String
   let name: Name
   let location: Location
@@ -20,27 +20,27 @@ struct User: Codable {
   let nat: String
 }
 
-struct Name: Codable {
+struct Name: Codable, Hashable, Equatable {
   let title: String
   let first: String
   let last: String
 }
 
-struct Location: Codable {
+struct Location: Codable, Hashable, Equatable {
   let city: String
   let country: String
   let coordinates: Coordinates
 }
 
-struct Coordinates: Codable {
+struct Coordinates: Codable, Hashable, Equatable {
   let latitude: String
   let longitude: String
 }
 
-struct DOB: Codable {
+struct DOB: Codable, Hashable, Equatable {
   let age: Int
 }
 
-struct Picture: Codable {
+struct Picture: Codable, Hashable, Equatable {
   let large: String
 }

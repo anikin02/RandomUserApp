@@ -6,8 +6,11 @@
 //
 
 import UIKit
+import SwiftUI
 
 class UsersListViewController: UIViewController {
+  
+  private var viewModel = UsersListViewModel()
   
   private lazy var addNewUserButton = {
     $0.setTitle("Add new user", for: .normal)
@@ -20,7 +23,22 @@ class UsersListViewController: UIViewController {
   
   override func viewDidLoad() {
     super.viewDidLoad()
+    
     view.backgroundColor = .white
+    
+    let usersListView = UsersListView(viewModel: viewModel)
+    let hostingController = UIHostingController(rootView: usersListView)
+    
+    addChild(hostingController)
+    view.addSubview(hostingController.view)
+    hostingController.didMove(toParent: self)
+    hostingController.view.translatesAutoresizingMaskIntoConstraints = false
+    NSLayoutConstraint.activate([
+      hostingController.view.topAnchor.constraint(equalTo: view.topAnchor),
+      hostingController.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+      hostingController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+      hostingController.view.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+    ])
     
     view.addSubview(addNewUserButton)
     addNewUserButton.addTarget(self, action: #selector(addNewUser), for: .touchUpInside)
@@ -36,7 +54,7 @@ class UsersListViewController: UIViewController {
   }
   
   @objc func addNewUser(){
-    
+    viewModel.addNewUser()
   }
 }
 
