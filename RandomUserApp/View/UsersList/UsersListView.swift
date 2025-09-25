@@ -11,7 +11,6 @@ struct UsersListView: View {
   @ObservedObject var viewModel: UsersListViewModel
   
   var body: some View {
-    
     NavigationStack {
       if viewModel.users.isEmpty {
         VStack {
@@ -23,22 +22,30 @@ struct UsersListView: View {
         }
         .background(.white)
       } else {
-        ScrollView {
-          LazyVStack {
-            ForEach(Array(viewModel.users.enumerated()), id: \.element) { index, user in
+        List {
+          ForEach(Array(viewModel.users.enumerated()), id: \.element) { index, user in
+            VStack {
               UserRowView(user: user)
-                .transition(.move(edge: .bottom).combined(with: .opacity))
-          
+                .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                  Button(role: .destructive) {
+                    withAnimation {
+                      viewModel.deleteUser(at: index)
+                    }
+                  } label: {
+                    Label("Delete", systemImage: "trash")
+                  }
+                }
               if index != viewModel.users.count - 1 {
                 Divider()
-                  .background(Color.gray.opacity(0.5))
               }
             }
+            .listRowSeparator(.hidden)
+            .listRowBackground(Color.white)
           }
-          .padding(.bottom, 100)
-          .padding()
-          .animation(.easeInOut, value: viewModel.users)
         }
+        .scrollContentBackground(.hidden)
+        .animation(.default, value: viewModel.users)
+        .listStyle(PlainListStyle())
         .background(.white)
       }
     }
