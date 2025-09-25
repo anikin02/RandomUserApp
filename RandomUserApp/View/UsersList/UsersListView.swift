@@ -17,7 +17,7 @@ struct UsersListView: View {
         VStack {
           Text("There are no users yet")
             .font(.system(size: 23, weight: .black))
-            .foregroundColor(.black)
+            .foregroundStyle(.black)
             .multilineTextAlignment(.center)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
@@ -25,8 +25,13 @@ struct UsersListView: View {
       } else {
         ScrollView {
           LazyVStack {
-            ForEach(viewModel.users, id: \.self) { user in
+            ForEach(Array(viewModel.users.enumerated()), id: \.element) { index, user in
               UserRowView(user: user)
+              
+              if index != viewModel.users.count - 1 {
+                Divider()
+                  .background(Color.gray.opacity(0.5))
+              }
             }
           }
           .padding(.bottom, 100)
@@ -36,25 +41,5 @@ struct UsersListView: View {
       }
     }
     .navigationTitle("Random Users")
-  }
-  
-  struct UserRowView: View {
-    var user: User
-    
-    var body: some View {
-      
-      VStack {
-        
-      }
-      
-      HStack {
-        Text(user.name.first)
-          .font(.title)
-          .foregroundColor(.primary)
-        Spacer()
-        Text(user.name.last)
-      }
-      .background(.appOrange)
-    }
   }
 }
