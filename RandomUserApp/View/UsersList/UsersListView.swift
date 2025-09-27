@@ -25,16 +25,18 @@ struct UsersListView: View {
         List {
           ForEach(Array(viewModel.users.enumerated()), id: \.element) { index, user in
             VStack {
-              UserRowView(user: user)
-                .swipeActions(edge: .trailing, allowsFullSwipe: true) {
-                  Button(role: .destructive) {
-                    withAnimation {
-                      viewModel.deleteUser(at: index)
+              NavigationLink(destination: UserDetailsView(user: user)) {
+                UserRowView(user: user)
+                  .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                    Button(role: .destructive) {
+                      withAnimation {
+                        viewModel.deleteUser(at: index)
+                      }
+                    } label: {
+                      Label("Delete", systemImage: "trash")
                     }
-                  } label: {
-                    Label("Delete", systemImage: "trash")
                   }
-                }
+              }
               if index != viewModel.users.count - 1 {
                 Divider()
               }

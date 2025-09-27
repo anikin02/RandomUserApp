@@ -35,6 +35,9 @@ class UsersListViewController: UIViewController {
   
   // MARK: - Setup
   private func setupAddNewUserButton() {
+    NotificationCenter.default.addObserver(self, selector: #selector(hideButton), name: .hideAddUserButton, object: nil)
+    NotificationCenter.default.addObserver(self, selector: #selector(showButton), name: .showAddUserButton, object: nil)
+    
     addNewUserButton.addTarget(self, action: #selector(addNewUser), for: .touchUpInside)
     view.addSubview(addNewUserButton)
   }
@@ -67,5 +70,17 @@ class UsersListViewController: UIViewController {
       viewModel.addNewUser()
     }
   }
+  @objc private func hideButton() {
+    addNewUserButton.isHidden = true
+  }
+  
+  @objc private func showButton() {
+    addNewUserButton.isHidden = false
+  }
 }
 
+// MARK: - Extension
+extension Notification.Name {
+  static let hideAddUserButton = Notification.Name("hideAddUserButton")
+  static let showAddUserButton = Notification.Name("showAddUserButton")
+}
