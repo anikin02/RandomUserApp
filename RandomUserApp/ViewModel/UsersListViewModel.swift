@@ -8,7 +8,6 @@
 import Foundation
 
 class UsersListViewModel: ObservableObject {
-  private let usersKey = "savedUsers"
   
   @Published var users: [User] = [] {
     didSet {
@@ -33,15 +32,19 @@ class UsersListViewModel: ObservableObject {
   }
   
   private func saveUsers() {
-    if let encoded = try? JSONEncoder().encode(users) {
-      UserDefaults.standard.set(encoded, forKey: usersKey)
+    DispatchQueue.main.async { [weak self] in
+      if let encoded = try? JSONEncoder().encode(self?.users) {
+        UserDefaults.standard.set(encoded, forKey: "savedUsers")
+      }
     }
   }
   
   private func loadUsers() {
-    if let data = UserDefaults.standard.data(forKey: usersKey),
-       let decoded = try? JSONDecoder().decode([User].self, from: data) {
-      users = decoded
+    DispatchQueue.main.async { [weak self] in
+      if let data = UserDefaults.standard.data(forKey: "savedUsers"),
+         let decoded = try? JSONDecoder().decode([User].self, from: data) {
+        self?.users = decoded
+      }
     }
   }
 }
